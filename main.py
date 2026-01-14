@@ -1,7 +1,34 @@
 from client.client_app import Client
 from server.server_app import Server
 from colorama import init, Fore
+import random
+import copy
 init(autoreset=True) # Initialize colorama for colored terminal output
+
+TEST_SIGNATURE_VERIFICATION = True # Set to True to test signature verification with tampered data
+
+
+def tamper_package(package: dict) -> dict:
+    """
+    Create a tampered copy of the package by modifying a random byte in a random field.
+    Used to demonstrate that signature verification correctly detects tampering.
+    """
+    tampered_package = copy.deepcopy(package)
+
+    # Choose a random field to tamper with
+    field_to_tamper = random.choice(["encrypted_gost_key", "nonce", "ciphertext"])
+    print(Fore.BLUE + f"[Main] TAMPERING TEST: Modifying '{field_to_tamper}' field...")
+
+    # Get the original bytes and flip a random bit
+    original_bytes = bytearray(tampered_package[field_to_tamper])
+    random_index = random.randint(0, len(original_bytes) - 1)
+    original_bytes[random_index] ^= random.randint(1, 255) # XOR with random non-zero value
+    tampered_package[field_to_tamper] = bytes(original_bytes)
+
+    print(Fore.BLUE + f"[Main] Modified byte at index {random_index}")
+
+    return tampered_package
+
 
 def main():
     print("====================== Secure Payment Protocol Demo ======================\n")
@@ -41,8 +68,20 @@ def main():
     package = client.prepare_payment_package(payment)
     print("\n[Main] Client -> Server: sending payment package...\n")
 
-    # ---- Server processes payment package ----
-    recovered_payment = server.process_payment_package(package)
+    # ---- Server processes payment package (with optional tampering test) ----
+    if TEST_SIGNATURE_VERIFICATION:
+        print("=== Testing Signature Verification with Tampered Data ===\n")
+        tampered_package = tamper_package(package)
+        print(Fore.BLUE + "[Main] Sending TAMPERED package to server...\n")
+
+        try:
+            recovered_payment = server.process_payment_package(tampered_package)
+            print(Fore.RED + "[Main] ERROR: Tampered package was accepted! This should not happen.") # If we reach here, signature verification failed
+        except ValueError as e:
+            print(Fore.GREEN + f"\n[Main] TEST_SIGNATURE_VERIFICATION: Server correctly rejected tampered package: {e}") # If we reach here, signature verification worked
+            return
+    else:
+        recovered_payment = server.process_payment_package(package)
 
     print("\n[Main] Payment accepted:")
     print(recovered_payment)
