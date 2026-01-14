@@ -8,6 +8,18 @@ def main():
     server = Server()
     client = Client()
 
+    # ---- User authentication ----
+    credentials = client.login()
+
+    print("\n[Main] Client -> Server: sending credentials...\n")
+    authenticated = server.authenticate_user(credentials)
+
+    if not authenticated:
+        print("\n[Main] Login failed. Aborting payment process.")
+        return
+
+    print("\n[Main] Login successful. Proceeding to payment...\n")
+
     # ---- Server setup ----
     server_public_rsa = server.initialize()
 

@@ -67,6 +67,28 @@ def _manual_input() -> PaymentData:
     )
 
 
+def collect_credentials() -> tuple[str, str]:
+    """
+    Collect username and password from user input.
+    """
+
+    print("=== User Login ===")
+
+    username = _prompt_until_valid(
+        "Username: ",
+        str,
+        validation.validate_username
+    )
+
+    password = _prompt_until_valid(
+        "Password: ",
+        str,
+        validation.validate_password
+    )
+
+    return username, password
+
+
 def collect_payment_data() -> PaymentData:
     """
     Collect payment data either manually or via random generation.

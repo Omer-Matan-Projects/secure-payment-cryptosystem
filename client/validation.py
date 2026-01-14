@@ -1,6 +1,14 @@
 import re
 
 
+def validate_username(value: str) -> bool:
+    return len(value.strip()) >= 3
+
+
+def validate_password(value: str) -> bool:
+    return len(value) >= 4
+
+
 def validate_transaction_id(value: str) -> bool:
     return len(value.strip()) > 0
 

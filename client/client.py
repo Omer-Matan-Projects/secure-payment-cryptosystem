@@ -4,7 +4,7 @@ from algorithms.ctr import ctr_encrypt
 from algorithms.rsa import rsa_encrypt_pkcs1_v1_5
 from algorithms.ec_elgamal_signature import generate_ec_keypair, sign
 from .signing_format import build_data_to_sign
-from .input_handler import collect_payment_data
+from .input_handler import collect_payment_data, collect_credentials
 
 
 class Client:
@@ -12,6 +12,22 @@ class Client:
         self._server_rsa_public_key = None
         self._ec_private_key = None
         self._ec_public_key = None
+
+    # -------------------------------------------------
+    # User login
+    # -------------------------------------------------
+    def login(self):
+        """
+        Collect user credentials for authentication.
+        """
+        print("[Client] Collecting user credentials...")
+        username, password = collect_credentials()
+
+        print("[Client] Sending credentials to server for authentication...")
+        return {
+            "username": username,
+            "password": password,
+        }
 
     # -------------------------------------------------
     # Client identity

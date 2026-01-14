@@ -4,6 +4,8 @@ from algorithms.ctr import ctr_decrypt
 from algorithms.ec_elgamal_signature import verify, ECSignature
 from client.signing_format import build_data_to_sign
 from client.payment_data import PaymentData
+import json
+from pathlib import Path
 
 
 class Server:
@@ -11,6 +13,30 @@ class Server:
         self._rsa_private_key = None
         self._rsa_public_key = None
         self._client_ec_public_key = None
+
+    # -------------------------------------------------
+    # Authentication
+    # -------------------------------------------------
+    def authenticate_user(self, credentials: dict) -> bool:
+        """
+        Authenticate user credentials against stored user data.
+        """
+        print("[Server] Authenticating user...")
+
+        users_file = Path(__file__).parent / "users.json"
+
+        with open(users_file, "r", encoding="utf-8") as f:
+            users = json.load(f)
+
+        username = credentials.get("username")
+        password = credentials.get("password")
+
+        if username in users and users[username] == password:
+            print("[Server] Authentication successful.")
+            return True
+
+        print("[Server] Authentication FAILED.")
+        return False
 
     # -------------------------------------------------
     # Server setup
