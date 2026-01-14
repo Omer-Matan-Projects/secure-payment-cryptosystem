@@ -18,7 +18,7 @@ def _prompt_until_valid(prompt: str, parse_func, validate_func):
             print(Fore.RED + "Invalid format. Please try again.")
 
 
-def _manual_input() -> PaymentData:
+def _manual_input(username: str) -> PaymentData:
     """
     Collect payment data via manual input.
     """
@@ -60,6 +60,7 @@ def _manual_input() -> PaymentData:
 
     return PaymentData(
         transaction_id=transaction_id,
+        payer=username,
         amount=amount,
         currency=currency.upper(),
         card_number=card_number,
@@ -90,7 +91,7 @@ def collect_credentials() -> tuple[str, str]:
     return username, password
 
 
-def collect_payment_data() -> PaymentData:
+def collect_payment_data(username: str) -> PaymentData:
     """
     Collect payment data either manually or via random generation.
     """
@@ -101,10 +102,10 @@ def collect_payment_data() -> PaymentData:
     choice = input(Fore.YELLOW + "Enter choice (1 or 2): ").strip()
 
     if choice == "1":
-        return _manual_input()
+        return _manual_input(username)
     elif choice == "2":
         print(Fore.CYAN + "\n[Client] Generating random valid payment data...")
-        return generate_random_payment()
+        return generate_random_payment(username)
     else:
         print(Fore.RED + "Invalid choice. Please try again.\n")
-        return collect_payment_data()
+        return collect_payment_data(username)

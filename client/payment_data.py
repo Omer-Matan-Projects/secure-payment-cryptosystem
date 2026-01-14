@@ -4,6 +4,7 @@ from dataclasses import dataclass
 @dataclass
 class PaymentData:
     transaction_id: str
+    payer: str
     amount: float
     currency: str
     card_number: str
@@ -17,7 +18,7 @@ class PaymentData:
         converts the textual data into a deterministic byte sequence.
         """
         data_str = (
-            f"{self.transaction_id}|{self.amount}|{self.currency}|"
+            f"{self.transaction_id}|{self.payer}|{self.amount}|{self.currency}|"
             f"{self.card_number}|{self.expiry_date}|{self.cvv}"
         )
         return data_str.encode("utf-8")
@@ -32,9 +33,10 @@ class PaymentData:
 
         return PaymentData(
             transaction_id=fields[0],
-            amount=float(fields[1]),
-            currency=fields[2],
-            card_number=fields[3],
-            expiry_date=fields[4],
-            cvv=fields[5]
+            payer=fields[1],
+            amount=float(fields[2]),
+            currency=fields[3],
+            card_number=fields[4],
+            expiry_date=fields[5],
+            cvv=fields[6]
         )

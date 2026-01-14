@@ -2,7 +2,7 @@ import random
 from client.payment_data import PaymentData
 
 
-def generate_random_payment() -> PaymentData:
+def generate_random_payment(username: str) -> PaymentData:
     """
     Generates random payment data.
     """
@@ -20,6 +20,7 @@ def generate_random_payment() -> PaymentData:
 
     return PaymentData(
         transaction_id=transaction_id,
+        payer=username,
         amount=amount,
         currency=currency,
         card_number=card_number,

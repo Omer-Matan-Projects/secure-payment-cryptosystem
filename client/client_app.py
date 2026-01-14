@@ -13,6 +13,7 @@ class Client:
         self._server_rsa_public_key = None
         self._ec_private_key = None
         self._ec_public_key = None
+        self._username = None
 
     # -------------------------------------------------
     # User login
@@ -23,6 +24,7 @@ class Client:
         """
         print(Fore.CYAN + "[Client] Collecting user credentials...\n")
         username, password = collect_credentials()
+        self._username = username
 
         print(Fore.CYAN + "\n[Client] Sending credentials to server for authentication...")
         return {
@@ -57,7 +59,7 @@ class Client:
         Collect payment data from the user / generate randomly.
         """
         print(Fore.CYAN + "[Client] Collecting payment data from user...\n")
-        payment = collect_payment_data()
+        payment = collect_payment_data(self._username)
         print(Fore.CYAN + "\n[Client] Payment data collected:")
         print(payment)
         return payment
