@@ -27,3 +27,17 @@ Run the main simulation script:
 ```bash
 python main.py
 ```
+
+---
+
+## User Authentication
+
+Before performing a payment, the system simulates a simple user login phase.
+User credentials are stored on the server side in a JSON file: `server/users.json`.
+Example users provided with the project:
+
+User | Password
+---- | --------
+alice | 1234
+bob   | 1234
+eve | 1234
