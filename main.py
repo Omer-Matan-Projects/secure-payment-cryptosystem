@@ -5,7 +5,7 @@ import random
 import copy
 init(autoreset=True) # Initialize colorama for colored terminal output
 
-TEST_SIGNATURE_VERIFICATION = True # Set to True to test signature verification with tampered data
+TEST_SIGNATURE_VERIFICATION = False # Set to True to test signature verification with tampered data
 
 
 def tamper_package(package: dict) -> dict:
